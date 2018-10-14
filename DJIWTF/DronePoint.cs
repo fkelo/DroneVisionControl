@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace DJIWTF
 {
-    class DronePoint
+    public class DronePoint
     {
         [JsonProperty("x")]
         public int X { get; set; }

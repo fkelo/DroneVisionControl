@@ -15,6 +15,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TelloLogParser", "TelloLogP
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DJIWTF", "DJIWTF\DJIWTF.csproj", "{45322CC3-9BBF-405C-99C8-9D49AE422E27}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DVPathCreator", "DVPathCreator\DVPathCreator.csproj", "{76562857-DFCC-4830-B30B-321B09B1EBD5}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -45,6 +47,10 @@ Global
 		{45322CC3-9BBF-405C-99C8-9D49AE422E27}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{45322CC3-9BBF-405C-99C8-9D49AE422E27}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{45322CC3-9BBF-405C-99C8-9D49AE422E27}.Release|Any CPU.Build.0 = Release|Any CPU
+		{76562857-DFCC-4830-B30B-321B09B1EBD5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{76562857-DFCC-4830-B30B-321B09B1EBD5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{76562857-DFCC-4830-B30B-321B09B1EBD5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{76562857-DFCC-4830-B30B-321B09B1EBD5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

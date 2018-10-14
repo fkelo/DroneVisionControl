@@ -189,6 +189,7 @@ namespace DJIWTF
                 currentPoint.Y = 0;
                 currentPoint.Z = 0;
                 currentPoint.Rotation = 0;
+                int currentView = 0;
                 running = true;
                 AbortState = false;
                 completed = false;
@@ -206,7 +207,9 @@ namespace DJIWTF
                         return;
                     }
                     currentOrderId = pnt.OrderId;
-                    DronePoint vector = CalculateVector(currentPoint, pnt);
+                    currentView = currentView % 360;
+                    if (currentView < 360) currentView += 360;
+                    DronePoint vector = CalculateVector(currentPoint, pnt, currentView);
                     if(vector.Y != 0)
                     {
                         if(vector.Y > 0)
@@ -226,11 +229,13 @@ namespace DJIWTF
                         {
                             Console.WriteLine("ROT RIGHT : " + Math.Abs(vector.Rotation));
                             Tello.cw(Math.Abs(vector.Rotation));
+                            currentView += Math.Abs(vector.Rotation);
                         }
                         else
                         {
                             Console.WriteLine("ROT LEFT : " + Math.Abs(vector.Rotation));
                             Tello.ccw(Math.Abs(vector.Rotation));
+                            currentView -= Math.Abs(vector.Rotation);
                         }
                     }
                     if(vector.X != 0)
@@ -249,11 +254,13 @@ namespace DJIWTF
                         {
                             Console.WriteLine("ROT RIGHT : " + Math.Abs(pnt.Rotation));
                             Tello.cw(Math.Abs(pnt.Rotation));
+                            currentView += Math.Abs(pnt.Rotation);
                         }
                         else
                         {
                             Console.WriteLine("ROT LEFT : " + Math.Abs(pnt.Rotation));
                             Tello.ccw(Math.Abs(pnt.Rotation));
+                            currentView -= Math.Abs(pnt.Rotation);
                         }
                     }
                     if (pnt.TakeImage)
@@ -262,7 +269,11 @@ namespace DJIWTF
                         Tello.takePicture();
                     }
                     currentPoint = pnt;
-                    currentPoint.Rotation = currentPoint.Rotation + pnt.Rotation;
+                    currentPoint.Rotation = (currentPoint.Rotation + vector.Rotation) % 360;
+                    if(currentPoint.Rotation < 0)
+                    {
+                        currentPoint.Rotation = currentPoint.Rotation + 360;
+                    }
                     if (!Tello.TestMode)
                     {
                         Thread.Sleep(5000);
@@ -475,7 +486,7 @@ namespace DJIWTF
             running = false;
         }
 
-        private DronePoint CalculateVector(DronePoint currentState, DronePoint nextPoint)
+        private DronePoint CalculateVector(DronePoint currentState, DronePoint nextPoint, int currentView)
         {
             int dX = nextPoint.X - currentState.X;
             int dY = nextPoint.Y - currentState.Y;
@@ -483,29 +494,36 @@ namespace DJIWTF
             int rotation = 0;
             if(dX != 0)
             {
-                if(dX > 0)
+                if(dX < 0)
                 {
-                    // desired direction 90°
-                    rotation = (90 - currentState.Rotation) % 360;
+                    // -X view --> 270
+                    rotation = 270 - currentView;
                 }
-                else if(dX < 0)
+                else
                 {
-                    // desired direction 270°
-                    rotation = (270 - currentState.Rotation) % 360;
+                    // X view --> 90
+                    rotation = 90 - currentView;
+                }
+            }else if(dZ != 0)
+            {
+                if(dZ < 0)
+                {
+                    // -Z view --> 180
+                    rotation = 180 - currentView;
+                }
+                else
+                {
+                    // Z view --> 0
+                    rotation = 0 - currentView;
                 }
             }
-            else if(dZ != 0)
+            rotation = rotation % 360;
+            if(rotation > 180)
             {
-                if(dZ > 0)
-                {
-                    // desired direction 0°
-                    rotation = (0 - currentState.Rotation) % 360;
-                }
-                else if(dZ < 0)
-                {
-                    // desired direction 180°
-                    rotation = (180 - currentState.Rotation) % 360;
-                }
+                rotation -= 360;
+            }else if(rotation < -180)
+            {
+                rotation += 180;
             }
             DronePoint retVal = new DronePoint();
             retVal.X = dX;
@@ -513,6 +531,42 @@ namespace DJIWTF
             retVal.Z = dZ;
             retVal.Rotation = rotation;
             return retVal;
+            //int rotation = 0;
+            //if(dX != 0)
+            //{
+            //    if(dX > 0)
+            //    {
+            //        // desired direction 90°
+            //        rotation = (90 - currentState.Rotation) % 360;
+            //    }
+            //    else if(dX < 0)
+            //    {
+            //        // desired direction 270°
+            //        rotation = (270 - currentState.Rotation) % 360;
+            //    }
+            //}
+            //else if(dZ != 0)
+            //{
+            //    if(dZ > 0)
+            //    {
+            //        // desired direction 0°
+            //        rotation = (0 - currentState.Rotation) % 360;
+            //    }
+            //    else if(dZ < 0)
+            //    {
+            //        // desired direction 180°
+            //        rotation = (180 - currentState.Rotation) % 360;
+            //    }
+            //}
+            //// change direction if bigger than +/- 180 deg
+            //if(rotation > 180)
+            //{
+            //    rotation = rotation - 360;
+            //}else if(rotation < -180)
+            //{
+            //    rotation = rotation + 360;
+            //}
+
         }
 
         //public async Task StopAsync(string runId)
@@ -891,7 +945,7 @@ namespace DJIWTF
         public void TestConfig()
         {
             Tello.TestMode = true;
-            string config = "{\"max_height\":200,\"speed\":25,\"path\":[{\"x\":0,\"y\":100,\"z\":0,\"rotation\":0,\"take_image\":false,\"order_id\":1},{\"x\":100,\"y\":100,\"z\":0,\"rotation\":0,\"take_image\":true,\"order_id\":2},{\"x\":100,\"y\":100,\"z\":0,\"rotation\":90,\"take_image\":false,\"order_id\":3},{\"x\":100,\"y\":100,\"z\":100,\"rotation\":0,\"take_image\":false,\"order_id\":4}]}";
+            string config = "{\"max_height\":250,\"speed\":25,\"path\":[{\"x\":0,\"y\":100,\"z\":0,\"rotation\":0,\"take_image\":false,\"order_id\":1},{\"x\":-50,\"y\":100,\"z\":0,\"rotation\":90,\"take_image\":false,\"order_id\":2},{\"x\":-100,\"y\":100,\"z\":0,\"rotation\":90,\"take_image\":false,\"order_id\":3},{\"x\":-150,\"y\":100,\"z\":0,\"rotation\":90,\"take_image\":false,\"order_id\":4},{\"x\":-200,\"y\":100,\"z\":0,\"rotation\":0,\"take_image\":false,\"order_id\":5},{\"x\":-200,\"y\":100,\"z\":-100,\"rotation\":0,\"take_image\":false,\"order_id\":6},{\"x\":-150,\"y\":100,\"z\":-100,\"rotation\":90,\"take_image\":false,\"order_id\":7},{\"x\":-100,\"y\":100,\"z\":-100,\"rotation\":90,\"take_image\":false,\"order_id\":8},{\"x\":-50,\"y\":100,\"z\":-100,\"rotation\":90,\"take_image\":false,\"order_id\":9},{\"x\":0,\"y\":100,\"z\":-100,\"rotation\":90,\"take_image\":false,\"order_id\":10},{\"x\":50,\"y\":100,\"z\":-100,\"rotation\":0,\"take_image\":false,\"order_id\":11}]}";
             DroneConfiguration conf = JsonConvert.DeserializeObject<DroneConfiguration>(config);
             SetConfiguration(conf);
             ExecuteScript("test");

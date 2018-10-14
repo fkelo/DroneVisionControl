@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace DJIWTF
 {
-    class DroneConfiguration
+    public class DroneConfiguration
     {
         [JsonProperty("max_height")]
         public int MaxHeight { get; set; }
