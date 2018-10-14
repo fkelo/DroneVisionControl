@@ -30,7 +30,7 @@ namespace DVPathCreator
                 OrderId = 2,
                 Rotation = 90,
                 TakeImage = false,
-                X = -50,
+                X = -75,
                 Y = 100,
                 Z = 0
             };
@@ -39,7 +39,7 @@ namespace DVPathCreator
                 OrderId = 3,
                 Rotation = 90,
                 TakeImage = false,
-                X = -100,
+                X = -150,
                 Y = 100,
                 Z = 0
             };
@@ -48,7 +48,7 @@ namespace DVPathCreator
                 OrderId = 4,
                 Rotation = 90,
                 TakeImage = false,
-                X = -150,
+                X = -225,
                 Y = 100,
                 Z = 0
             };
@@ -57,7 +57,7 @@ namespace DVPathCreator
                 OrderId = 5,
                 Rotation = 0,
                 TakeImage = false,
-                X = -200,
+                X = -300,
                 Y = 100,
                 Z = 0
             };
@@ -66,7 +66,7 @@ namespace DVPathCreator
                 OrderId = 6,
                 Rotation = 0,
                 TakeImage = false,
-                X = -200,
+                X = -300,
                 Y = 100,
                 Z = -100
             };
@@ -75,7 +75,7 @@ namespace DVPathCreator
                 OrderId = 7,
                 Rotation = 90,
                 TakeImage = false,
-                X = -150,
+                X = -225,
                 Y = 100,
                 Z = -100
             };
@@ -84,7 +84,7 @@ namespace DVPathCreator
                 OrderId = 8,
                 Rotation = 90,
                 TakeImage = false,
-                X = -100,
+                X = -150,
                 Y = 100,
                 Z = -100
             };
@@ -93,7 +93,7 @@ namespace DVPathCreator
                 OrderId = 9,
                 Rotation = 90,
                 TakeImage = false,
-                X = -50,
+                X = -75,
                 Y = 100,
                 Z = -100
             };
@@ -111,7 +111,7 @@ namespace DVPathCreator
                 OrderId = 11,
                 Rotation = 0,
                 TakeImage = false,
-                X = 50,
+                X = 75,
                 Y = 100,
                 Z = -100
             };
